@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dark-labyrinth-rpg"
+version = "0.1.0"
+description = "A dark fantasy RPG and procedural folder-based dungeon crawler."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "Antigravity", email = "antigravity@google.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "rich>=13.0",
+]
+
+[project.scripts]
+dark-labyrinth = "dark_labyrinth.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dark_labyrinth"]
