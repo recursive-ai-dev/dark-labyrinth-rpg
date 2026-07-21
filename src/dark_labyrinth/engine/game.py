@@ -63,6 +63,8 @@ def get_tui_layout(player: PlayerState, current_room_info: str, combat_log: str)
 
 def run_tui(dungeon_root: str):
     """Launch the interactive TUI mode starting at the specified dungeon root directory."""
+    dungeon_root = str(Path(dungeon_root).resolve())
+
     player = PlayerState()
     player.load()
 

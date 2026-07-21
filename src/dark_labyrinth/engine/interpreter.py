@@ -175,37 +175,13 @@ def execute_unlock(player: PlayerState, exit_folder: str, answer_or_key: str = "
     if not lock_info["locked"]:
         return f"🚶 The passage to '{exit_folder}' is already open."
 
+    success_msg = ""
     if lock_info["type"] == "key":
         key_needed = lock_info["key_needed"]
         if player.has_key(key_needed):
             # Consume key
             player.remove_item(key_needed)
-            
-            # Unlock exit
-            lock_info["locked"] = False
-            
-            # Rename physical folder
-            unlocked_folder = exit_folder[7:] if exit_folder.startswith("locked_") else exit_folder
-            
-            # Check if target folder name exists to prevent duplicates
-            counter = 1
-            final_folder = unlocked_folder
-            while Path(final_folder).exists():
-                final_folder = f"{unlocked_folder}_{counter}"
-                counter += 1
-
-            try:
-                os.rename(exit_folder, final_folder)
-            except Exception as e:
-                return f"❌ OS Error renaming folder: {e}"
-
-            # Update exits map
-            exits[final_folder] = {"locked": False}
-            del exits[exit_folder]
-
-            save_local_room(room)
-            player.save()
-            return f"🔓 [bold green]UNLOCKED[/bold green]: You unlock the door with the {key_needed}! The folder has been renamed to '{final_folder}'."
+            success_msg = f"🔓 [bold green]UNLOCKED[/bold green]: You unlock the door with the {key_needed}!"
         else:
             return f"❌ Locked door. You need a [bold]{key_needed}[/bold] to pass."
 
@@ -217,33 +193,37 @@ def execute_unlock(player: PlayerState, exit_folder: str, answer_or_key: str = "
             return f"❓ Riddle Seal: \"{lock_info['riddle_question']}\"\n*Usage:* Run `dark-labyrinth unlock {exit_folder} \"your answer\"`"
 
         if user_ans == correct_ans:
-            # Unlock exit
-            lock_info["locked"] = False
-            
-            # Rename physical folder
-            unlocked_folder = exit_folder[7:] if exit_folder.startswith("locked_") else exit_folder
-            counter = 1
-            final_folder = unlocked_folder
-            while Path(final_folder).exists():
-                final_folder = f"{unlocked_folder}_{counter}"
-                counter += 1
-
-            try:
-                os.rename(exit_folder, final_folder)
-            except Exception as e:
-                return f"❌ OS Error renaming folder: {e}"
-
-            # Update exits map
-            exits[final_folder] = {"locked": False}
-            del exits[exit_folder]
-
-            save_local_room(room)
-            player.save()
-            return f"🔓 [bold green]SEAL SHATTERED[/bold green]: The riddle seal fades away! The folder has been renamed to '{final_folder}'."
+            success_msg = f"🔓 [bold green]SEAL SHATTERED[/bold green]: The riddle seal fades away!"
         else:
             return f"❌ Incorrect answer. The riddle seal glows crimson: \"{lock_info['riddle_question']}\""
+    else:
+        return "❌ Unknown lock type."
 
-    return "❌ Unknown lock type."
+    # Shared unlock logic
+    lock_info["locked"] = False
+
+    # Rename physical folder
+    unlocked_folder = exit_folder[7:] if exit_folder.startswith("locked_") else exit_folder
+
+    # Check if target folder name exists to prevent duplicates
+    counter = 1
+    final_folder = unlocked_folder
+    while Path(final_folder).exists():
+        final_folder = f"{unlocked_folder}_{counter}"
+        counter += 1
+
+    try:
+        os.rename(exit_folder, final_folder)
+    except Exception as e:
+        return f"❌ OS Error renaming folder: {e}"
+
+    # Update exits map
+    exits[final_folder] = {"locked": False}
+    del exits[exit_folder]
+
+    save_local_room(room)
+    player.save()
+    return f"{success_msg} The folder has been renamed to '{final_folder}'."
 
 
 def execute_read(player: PlayerState, scroll_name: str) -> str:

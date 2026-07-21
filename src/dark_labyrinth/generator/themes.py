@@ -19,20 +19,10 @@ THEME_TEMPLATES: List[str] = [
     "the_{adj}_{structure}_of_{lore}",
 ]
 
-CONNECTORS: List[str] = [
-    "beneath", "within", "beyond", "below", "under", "deep_in",
-    "through", "past", "inside", "at_the_heart_of", "at_the_edge_of",
-    "hidden_in", "buried_under", "locked_within", "carved_from",
-]
-
 NUMERALS: List[str] = [
     "first", "second", "third", "fourth", "fifth", "sixth", "seventh",
     "eighth", "ninth", "tenth", "last", "uppermost", "lowest", "deepest",
     "outermost", "alpha", "omega", "prime", "final",
-]
-
-ORDINAL_PREFIXES: List[str] = [
-    "the", "a", "an", "this", "that", "forsaken", "damned", "lost", "wretched",
 ]
 
 # Combined rich semantic banks from both scaffolds

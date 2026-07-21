@@ -53,6 +53,22 @@ class TestRPGEngine(unittest.TestCase):
         self.assertEqual(self.player.hp, 120)
         self.assertEqual(self.player.xp, 5)  # Overflow carried over
 
+    def test_massive_xp_gain(self):
+        """Test that gaining a massive amount of XP correctly progresses multiple levels."""
+        # Player is level 1, xp 0.
+        # Level 1 -> 2 needs 100
+        # Level 2 -> 3 needs 200
+        # Level 3 -> 4 needs 300
+        # Total to reach level 4, xp 50 is: 100 + 200 + 300 + 50 = 650
+        leveled_up = self.player.add_xp(650)
+        self.assertTrue(leveled_up)
+        self.assertEqual(self.player.level, 4)
+        self.assertEqual(self.player.xp, 50)
+
+        # Max HP base was 100. Gained 3 levels (3 * 20 = 60). New Max HP should be 160.
+        self.assertEqual(self.player.max_hp, 160)
+        self.assertEqual(self.player.hp, 160)
+
     def test_item_backpack_management(self):
         """Test item additions and removals."""
         # Check has key

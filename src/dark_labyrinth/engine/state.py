@@ -54,16 +54,22 @@ class PlayerState:
     def add_xp(self, amount: int) -> bool:
         """Add XP and return True if leveled up."""
         self.xp += amount
-        next_level_xp = self.level * 100
-        if self.xp >= next_level_xp:
-            self.level += 1
-            self.xp -= next_level_xp
-            self.max_hp += 20
-            self.hp = self.max_hp
-            self.atk_base += 3
-            self.def_base += 1
-            return True
-        return False
+        leveled_up = False
+
+        while True:
+            next_level_xp = self.level * 100
+            if self.xp >= next_level_xp:
+                self.level += 1
+                self.xp -= next_level_xp
+                self.max_hp += 20
+                self.hp = self.max_hp
+                self.atk_base += 3
+                self.def_base += 1
+                leveled_up = True
+            else:
+                break
+
+        return leveled_up
 
     def add_item(self, item: Dict[str, Any]):
         """Add an item to the player's inventory."""
