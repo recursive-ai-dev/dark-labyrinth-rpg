@@ -207,7 +207,7 @@ def merge_themes(keywords: List[str]) -> Tuple[Dict[str, List[str]], str]:
         resolved_banks.append(bank)
         names.append(name)
 
-    merged = {
+    merged: Dict[str, List[str]] = {
         "roots": [],
         "descriptors": [],
         "structures": [],
@@ -270,6 +270,15 @@ def generate_room_name(bank: Dict[str, List[str]], used_names: Set[str], depth_h
         attempts += 1
 
     # Fallback
-    fallback = f"chamber_{random.randint(100, 999)}"
+    fallback_attempts = 0
+    while fallback_attempts < 1000:
+        fallback = f"chamber_{random.randint(100, 99999)}"
+        if fallback not in used_names:
+            used_names.add(fallback)
+            return fallback
+        fallback_attempts += 1
+
+    # Ultimate fallback if it still collides
+    fallback = f"chamber_{len(used_names)}_{random.randint(1000, 9999)}"
     used_names.add(fallback)
     return fallback

@@ -6,7 +6,7 @@ Provides an interactive text-adventure terminal layout with widgets and combat l
 import sys
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from rich.console import Console
 from rich.panel import Panel
@@ -98,7 +98,7 @@ def run_tui(dungeon_root: str):
 
         # Build options list
         options = []
-        action_map = {}
+        action_map: Dict[int, Any] = {}
 
         # 1. Fight monster
         if room.get("monster") and room["monster"].get("hp", 0) > 0:

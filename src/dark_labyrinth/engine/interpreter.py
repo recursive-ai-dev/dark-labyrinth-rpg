@@ -20,7 +20,8 @@ def get_local_room() -> Dict[str, Any]:
     try:
         with open(data_path, "r") as f:
             return json.load(f)
-    except Exception:
+    except Exception as e:
+        print(f"Error reading room data: {e}")
         return {}
 
 
@@ -204,6 +205,11 @@ def execute_unlock(player: PlayerState, exit_folder: str, answer_or_key: str = "
 
     # Rename physical folder
     unlocked_folder = exit_folder[7:] if exit_folder.startswith("locked_") else exit_folder
+
+    if "/" in exit_folder or "\\" in exit_folder or ".." in exit_folder:
+        return "❌ Invalid exit name."
+    if "/" in unlocked_folder or "\\" in unlocked_folder or ".." in unlocked_folder:
+        return "❌ Invalid exit name."
 
     # Check if target folder name exists to prevent duplicates
     counter = 1
