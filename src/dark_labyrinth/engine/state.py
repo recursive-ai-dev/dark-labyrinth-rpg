@@ -149,7 +149,8 @@ class PlayerState:
             self.equipped_armor = data.get("equipped_armor", "")
             self.current_room_path = data.get("current_room_path", "")
             return True
-        except Exception:
+        except Exception as e:
+            print(f"Error loading save: {e}")
             return False
 
     def save(self):
@@ -170,5 +171,5 @@ class PlayerState:
         try:
             with open(SAVE_PATH, "w") as f:
                 json.dump(data, f, indent=2)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Error saving state: {e}")
