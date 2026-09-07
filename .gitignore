@@ -38,3 +38,4 @@ venv.bak/
 .dark_labyrinth_save.json
 labyrinth_output/
 tests/dungeon_output/
+.audit/
